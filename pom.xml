@@ -23,6 +23,11 @@
             <artifactId>dropwizard-core</artifactId>
             <version>${version.dropwizard}</version>
         </dependency>
+        <dependency>
+            <groupId>io.dropwizard</groupId>
+            <artifactId>dropwizard-assets</artifactId>
+            <version>${version.dropwizard}</version>
+        </dependency>
         <!-- parser -->
         <dependency>
             <groupId>org.apache.poi</groupId>
@@ -121,6 +126,7 @@
                 <includes>
                     <include>**/*.xml</include>
                     <include>**/*.xlsx</include>
+                    <include>assets/**</include>
                 </includes>
             </resource>
         </resources>

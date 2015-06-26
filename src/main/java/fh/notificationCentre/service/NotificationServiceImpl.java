@@ -5,6 +5,7 @@ import fh.notificationCentre.cache.NotificationMapCache;
 import fh.notificationCentre.data.entities.Notification;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by filip on 26.6.15.
@@ -26,22 +27,24 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public void markNotificationAsRead(Notification notification, String userGuid) {
-
+        Map<String, Boolean> readByUserGuid = notification.getReadByUserGuid();
+        readByUserGuid.put(userGuid, true);
+        notificationCache.put(notification);
     }
 
     @Override
     public void deleteNotification(Notification notification) {
-
+        notificationCache.remove(notification);
     }
 
     @Override
-    public void getRecentNotifications() {
-
+    public List<Notification> getRecentNotifications() {
+        return notificationCache.getAll(); // TBD
     }
 
     @Override
-    public void getNotification(String notificationGuid) {
-
+    public Notification getNotification(String notificationGuid) {
+        return notificationCache.get(notificationGuid);
     }
 
     @Override

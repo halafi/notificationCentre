@@ -10,7 +10,7 @@ import java.util.List;
 public interface NotificationService {
     public void markNotificationAsRead(Notification notification, String userGuid);
     public void deleteNotification(Notification notification);
-    public void getRecentNotifications();
-    public void getNotification(String notificationGuid);
+    public List<Notification> getRecentNotifications();
+    public Notification getNotification(String notificationGuid);
     public List<Notification> getAllNotifications();
 }

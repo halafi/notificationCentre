@@ -1,15 +1,12 @@
 package fh.notificationCentre.rest;
 
-import fh.notificationCentre.cache.NotificationCache;
-import fh.notificationCentre.cache.NotificationMapCache;
 import fh.notificationCentre.data.entities.Notification;
 import fh.notificationCentre.service.NotificationService;
 import fh.notificationCentre.service.NotificationServiceImpl;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.util.List;
 
 /**
@@ -19,20 +16,30 @@ import java.util.List;
 @Produces(MediaType.APPLICATION_JSON)
 public class NotificationResource {
 
-    //private NotificationCache notificationCache = NotificationMapCache.getInstance();
     private NotificationService notificationService = NotificationServiceImpl.getInstance();
-
-    public NotificationResource() {
-        //this.notificationCache.init();
-    }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<Notification> getAllNotifications() {
         return notificationService.getAllNotifications();
     }
-    /*public Notification getTest(@QueryParam("name") Optional<String> name) {
-        final String value = String.format(template, name.or(defaultName));
-        return new Saying(counter.incrementAndGet(), value);
-    }*/
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/{id}")
+    public Notification getNotification(@PathParam("id") String id) {
+        return notificationService.getNotification(id);
+    }
+
+    @DELETE
+    @Path("/{id}")
+    public Response deleteNotification(@PathParam("id") String id) {
+        Notification notification = notificationService.getNotification(id);
+        if (notification != null) {
+            notificationService.deleteNotification(notification);
+            return Response.ok().build();
+        }
+        return Response.noContent().build();
+    }
+
 }

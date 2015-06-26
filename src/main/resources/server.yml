@@ -1,2 +1,6 @@
 template: Hello, %s!
 defaultName: Stranger
+server:
+  type: default
+  maxThreads: 1024
+  rootPath: /notificationCentre

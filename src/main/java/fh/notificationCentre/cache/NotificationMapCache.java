@@ -13,6 +13,7 @@ import java.util.Map;
  * Created by filip on 26.6.15.
  */
 public class NotificationMapCache implements NotificationCache {
+    public static String DATA_SOURCE = "src/main/resources/notifications.xlsx";
     //storage
     private Map<String, Notification> notificationsByGuid;
 
@@ -32,38 +33,40 @@ public class NotificationMapCache implements NotificationCache {
     public void init() {
         this.notificationsByGuid = new HashMap<>();
         // load in xlsx data at start
-        final List<Notification> notifications = parser.parse("src/main/resources/notifications.xlsx");
-        for (Notification n : notifications) {
-            put(n);
+        for (Notification notification : parser.parse(DATA_SOURCE)) {
+            put(notification);
         }
     }
 
     @Override
     public void clear() {
-        this.notificationsByGuid.clear();
+        notificationsByGuid.clear();
     }
 
     @Override
     public void put(Notification notification) {
-        this.notificationsByGuid.put(notification.getNotificationGuid(), notification);
+        if (notificationsByGuid.containsKey(notification.getNotificationGuid())) { // update
+            notificationsByGuid.remove(notification.getNotificationGuid());
+        }
+        notificationsByGuid.put(notification.getNotificationGuid(), notification); // add
     }
 
     @Override
     public void remove(Notification notification) {
-        this.notificationsByGuid.remove(notification.getNotificationGuid());
+        notificationsByGuid.remove(notification.getNotificationGuid());
     }
 
     @Override
     public Notification get(String guid) {
-        if (this.notificationsByGuid.containsKey(guid)) {
-            return this.notificationsByGuid.get(guid);
+        if (notificationsByGuid.containsKey(guid)) {
+            return notificationsByGuid.get(guid);
         }
         return null;
     }
 
     @Override
     public List<Notification> getAll() {
-        return new ArrayList<>(this.notificationsByGuid.values());
+        return new ArrayList<>(notificationsByGuid.values());
     }
 
     public void setParser(NotificationParser parser) {
