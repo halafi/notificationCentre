@@ -18,7 +18,10 @@ public class NotificationCentreApplication extends Application<NotificationCentr
 
     @Override
     public void initialize(Bootstrap<NotificationCentreConfiguration> bootstrap) {
-        bootstrap.addBundle(new AssetsBundle("/assets"));
+        bootstrap.addBundle(new AssetsBundle("/assets", "/", "index.html", "index"));
+        bootstrap.addBundle(new AssetsBundle("/assets/css", "/css", null, "css"));
+        bootstrap.addBundle(new AssetsBundle("/assets/js", "/js", null, "js"));
+        bootstrap.addBundle(new AssetsBundle("/assets/fonts", "/fonts", null, "fonts"));
     }
 
     @Override
