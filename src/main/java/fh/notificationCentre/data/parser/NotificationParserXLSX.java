@@ -4,8 +4,6 @@ import fh.notificationCentre.data.entities.Notification;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.FileInputStream;
 import java.util.ArrayList;
@@ -18,7 +16,16 @@ import java.util.List;
  */
 public class NotificationParserXLSX implements NotificationParser {
 
-    final Logger log = LoggerFactory.getLogger(this.getClass());
+    //Singleton
+    private static NotificationParserXLSX instance = new NotificationParserXLSX();
+
+    private NotificationParserXLSX(){
+
+    };
+
+    public static synchronized NotificationParserXLSX getInstance() {
+            return instance;
+    }
 
     @Override
     public List<Notification> parse(String filepath) {
@@ -74,11 +81,10 @@ public class NotificationParserXLSX implements NotificationParser {
                     notification.setSentTimestamp(row.getCell(11).getNumericCellValue());
                 }
                 notification.setReadByUserGuid(new HashMap<>());
-                log.info("parsed notification: " + notification);
                 notifications.add(notification);
             }
         } catch (java.io.IOException e) {
-            log.error(e.getLocalizedMessage());
+            System.out.println(e.getLocalizedMessage());
         }
         return notifications;
     }

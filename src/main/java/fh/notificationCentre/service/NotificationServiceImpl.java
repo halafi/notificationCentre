@@ -1,20 +1,28 @@
 package fh.notificationCentre.service;
 
 import fh.notificationCentre.cache.NotificationCache;
+import fh.notificationCentre.cache.NotificationMapCache;
 import fh.notificationCentre.data.entities.Notification;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
 
 /**
  * Created by filip on 26.6.15.
  */
 public class NotificationServiceImpl implements NotificationService {
 
-    @Autowired
-    private NotificationCache notificationCache;
+    private NotificationCache notificationCache = NotificationMapCache.getInstance();
 
-    final Logger log = LoggerFactory.getLogger(this.getClass());
+    //Singleton
+    private static NotificationServiceImpl instance = new NotificationServiceImpl();
+
+    private NotificationServiceImpl() {
+        notificationCache.init();
+    }
+
+    public static synchronized NotificationServiceImpl getInstance() {
+        return instance;
+    }
 
     @Override
     public void markNotificationAsRead(Notification notification, String userGuid) {
@@ -34,5 +42,10 @@ public class NotificationServiceImpl implements NotificationService {
     @Override
     public void getNotification(String notificationGuid) {
 
+    }
+
+    @Override
+    public List<Notification> getAllNotifications() {
+        return notificationCache.getAll();
     }
 }

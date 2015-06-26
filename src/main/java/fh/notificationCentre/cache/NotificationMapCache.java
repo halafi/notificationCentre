@@ -2,10 +2,9 @@ package fh.notificationCentre.cache;
 
 import fh.notificationCentre.data.entities.Notification;
 import fh.notificationCentre.data.parser.NotificationParser;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import fh.notificationCentre.data.parser.NotificationParserXLSX;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,19 +13,25 @@ import java.util.Map;
  * Created by filip on 26.6.15.
  */
 public class NotificationMapCache implements NotificationCache {
-
-    @Autowired
-    private NotificationParser parser;
-
-    final Logger log = LoggerFactory.getLogger(this.getClass());
-
+    //storage
     private Map<String, Notification> notificationsByGuid;
 
+    private NotificationParser parser = NotificationParserXLSX.getInstance();
+
+    //Singleton
+    private static NotificationMapCache instance = new NotificationMapCache();
+
+    private NotificationMapCache() {
+    }
+
+    public static synchronized NotificationMapCache getInstance() {
+        return instance;
+    }
 
     @Override
     public void init() {
         this.notificationsByGuid = new HashMap<>();
-        // load in xlsx data
+        // load in xlsx data at start
         final List<Notification> notifications = parser.parse("src/main/resources/notifications.xlsx");
         for (Notification n : notifications) {
             put(n);
@@ -54,5 +59,14 @@ public class NotificationMapCache implements NotificationCache {
             return this.notificationsByGuid.get(guid);
         }
         return null;
+    }
+
+    @Override
+    public List<Notification> getAll() {
+        return new ArrayList<>(this.notificationsByGuid.values());
+    }
+
+    public void setParser(NotificationParser parser) {
+        this.parser = parser;
     }
 }
