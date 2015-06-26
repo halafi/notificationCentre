@@ -1,5 +1,7 @@
 package fh.notificationCentre.data.entities;
 
+import java.util.Map;
+
 /**
  * Created by filip on 26.6.15.
  */
@@ -17,6 +19,7 @@ public class Notification {
     private String content;
     private Double eventTimestamp;
     private Double sentTimestamp;
+    private Map<String, Boolean> readByUserGuid;
 
     public String getNotificationGuid() {
         return notificationGuid;
@@ -114,6 +117,14 @@ public class Notification {
         this.sentTimestamp = sentTimestamp;
     }
 
+    public Map getReadByUserGuid() {
+        return readByUserGuid;
+    }
+
+    public void setReadByUserGuid(Map readByUserGuid) {
+        this.readByUserGuid = readByUserGuid;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -132,7 +143,8 @@ public class Notification {
         if (!title.equals(that.title)) return false;
         if (!content.equals(that.content)) return false;
         if (!eventTimestamp.equals(that.eventTimestamp)) return false;
-        return sentTimestamp.equals(that.sentTimestamp);
+        if (!sentTimestamp.equals(that.sentTimestamp)) return false;
+        return readByUserGuid.equals(that.readByUserGuid);
 
     }
 
@@ -150,6 +162,7 @@ public class Notification {
         result = 31 * result + content.hashCode();
         result = 31 * result + eventTimestamp.hashCode();
         result = 31 * result + sentTimestamp.hashCode();
+        result = 31 * result + readByUserGuid.hashCode();
         return result;
     }
 
@@ -166,8 +179,9 @@ public class Notification {
                 ", geoferenceRadiusMetres=" + geoferenceRadiusMetres +
                 ", title='" + title + '\'' +
                 ", content='" + content + '\'' +
-                ", eventTimestamp='" + eventTimestamp + '\'' +
-                ", sentTimestamp='" + sentTimestamp + '\'' +
+                ", eventTimestamp=" + eventTimestamp +
+                ", sentTimestamp=" + sentTimestamp +
+                ", readByUserGuid=" + readByUserGuid +
                 '}';
     }
 }

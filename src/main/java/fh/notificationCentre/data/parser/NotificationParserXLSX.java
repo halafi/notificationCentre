@@ -4,9 +4,12 @@ import fh.notificationCentre.data.entities.Notification;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.FileInputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
@@ -14,11 +17,14 @@ import java.util.List;
  * Created by filip on 26.6.15.
  */
 public class NotificationParserXLSX implements NotificationParser {
+
+    final Logger log = LoggerFactory.getLogger(this.getClass());
+
     @Override
-    public List<Notification> parse() {
+    public List<Notification> parse(String filepath) {
         List<Notification> notifications = new ArrayList<>();
         try {
-            FileInputStream fis = new FileInputStream("src/main/resources/notifications.xlsx");
+            FileInputStream fis = new FileInputStream(filepath);
             // Finds the workbook instance for XLSX file
             XSSFWorkbook myWorkBook = new XSSFWorkbook(fis);
             // Return first sheet from the XLSX workbook
@@ -67,11 +73,12 @@ public class NotificationParserXLSX implements NotificationParser {
                 if (row.getCell(11) != null) {
                     notification.setSentTimestamp(row.getCell(11).getNumericCellValue());
                 }
-                System.out.println("parsed notification: " + notification);
+                notification.setReadByUserGuid(new HashMap<>());
+                log.info("parsed notification: " + notification);
                 notifications.add(notification);
             }
         } catch (java.io.IOException e) {
-            System.out.println(e.getLocalizedMessage());
+            log.error(e.getLocalizedMessage());
         }
         return notifications;
     }

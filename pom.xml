@@ -14,7 +14,9 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
 
+        <version.spring>4.1.6.RELEASE</version.spring>
         <!--<version.log4j>1.2.17</version.log4j>-->
+        <version.slf4j>1.7.12</version.slf4j>
     </properties>
 
     <dependencies>
@@ -28,7 +30,27 @@
             <artifactId>poi-ooxml</artifactId>
             <version>3.12</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>${version.spring}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <version>${version.spring}</version>
+        </dependency>
+        <!-- logging -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${version.slf4j}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>${version.slf4j}</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -52,6 +74,15 @@
                     <skipTests>true</skipTests>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.tomcat.maven</groupId>
+                <artifactId>tomcat7-maven-plugin</artifactId>
+                <version>2.2</version>
+                <configuration>
+                    <port>8080</port>
+                    <path>/notificationCentre</path>
+                </configuration>
+            </plugin>
         </plugins>
 
         <resources>
@@ -59,6 +90,7 @@
                 <directory>src/main/resources</directory>
                 <filtering>true</filtering>
                 <includes>
+                    <include>**/*.xml</include>
                     <include>**/*.xlsx</include>
                 </includes>
             </resource>
