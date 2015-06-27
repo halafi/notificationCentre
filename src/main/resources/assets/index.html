@@ -3,50 +3,60 @@
 <head lang="en">
     <meta charset="UTF-8">
     <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/app.css">
     <title>Notification Centre</title>
 </head>
 <body>
 <div class="container-fluid" ng-controller="NotificationController">
     <h2>All Notifications ({{notifications.length}})</h2>
 
-    <div class="row">
-        <div class="col-xs-12 col-md-2 pull-left">
-            Sort by:
-            <select ng-model="orderProp">
-                <option value="eventType">Event type</option>
-                <option value="title">Title</option>
-            </select>
-        </div>
-        <div class="col-xs-12 col-md-2 col-lg-1 pull-right">
+    <div>
+        <div class="top-rightFilter">
             <div class="input-group">
                 <input ng-model="searchQuery" type="text" class="form-control" placeholder="Filter">
             </div>
         </div>
     </div>
-    <div class="row">
-        <table class="table table-striped">
+
+    <div>
+        <table class="table table-bordered table-condensed">
             <thead>
             <tr>
-                <th>notificationGuid</th>
-                <th>deviceGuid</th>
-                <th>userGuid</th>
-                <th>eventType</th>
-                <th>eventSubtype</th>
-                <th>geoferenceLat</th>
-                <th>geoferenceLon</th>
-                <th>geoferenceRadiusMetres</th>
-                <th>title</th>
+                <th class="typeCell">eventType</th>
+                <th class="subtypeCell">eventSubtype</th>
+                <th class="titleCell">title</th>
                 <th>content</th>
-                <th>eventTimestamp</th>
-                <th>sentTimestamp</th>
-                <!--<th>Delete</th>-->
+                <th class="stampCell">eventTimestamp</th>
+                <th class="stampCell">sentTimestamp</th>
+                <th class="checkboxCell">read</th>
+                <th class="buttonCell"></th>
+                <th class="buttonCell"></th>
             </tr>
             </thead>
             <tbody>
-            <tr ng-repeat="notification in notifications | filter:searchQuery | orderBy:orderProp"
+            <tr ng-repeat="notification in notifications | filter:searchQuery | orderBy: eventTimestamp | groupBy: eventType"
                 ng-include="getTemplate(notification)">
             </tbody>
         </table>
+    </div>
+
+    <div id="view" ng-if="selectedNotification">
+        <div class="well">
+            <ul>
+                <li>Notification Guid: {{selectedNotification.notificationGuid}}</li>
+                <li>Device Guid: {{selectedNotification.deviceGuid}}</li>
+                <li>User Guid: {{selectedNotification.userGuid}}</li>
+                <li>Event Type: {{selectedNotification.eventType}}</li>
+                <li>Event Subtype: {{selectedNotification.eventSubtype}}</li>
+                <li>Geoference Lat: {{selectedNotification.geoferenceLat}}</li>
+                <li>Geoference Lon: {{selectedNotification.geoferenceLon}}</li>
+                <li>Geoference Radius Metres: {{selectedNotification.geoferenceRadiusMetres}}</li>
+                <li>Title: {{selectedNotification.title}}</li>
+                <li>Content: {{selectedNotification.content}}</li>
+                <li>Event time: {{selectedNotification.eventTimestamp | date : "dd/MM/yyyy HH:mm:ss"}}</li>
+                <li>Sent time: {{selectedNotification.sentTimestamp | date : "dd/MM/yyyy HH:mm:ss"}}</li>
+            </ul>
+        </div>
     </div>
 </div>
 <!-- /container -->
@@ -56,27 +66,26 @@
 <script src="js/angular.min.js"></script>
 <script src="js/angular-resource.min.js"></script>
 <script src="js/angular-ui-router.min.js"></script>
-<script src="js/services.js"></script>
-<script src="js/controllers.js"></script>
-<!--<script src="js/ui-bootstrap.min.js"></script>-->
+<script src="js/angular-filter.js"></script>
 <script src="js/app.js"></script>
 <script type="text/ng-template" id="display">
-    <td>{{notification.notificationGuid}}</td>
-    <td>{{notification.deviceGuid}}</td>
-    <td>{{notification.userGuid}}</td>
     <td>{{notification.eventType}}</td>
     <td>{{notification.eventSubtype}}</td>
-    <td>{{notification.geoferenceLat}}</td>
-    <td>{{notification.geoferenceLon}}</td>
-    <td>{{notification.geoferenceRadiusMetres}}</td>
     <td>{{notification.title}}</td>
     <td>{{notification.content}}</td>
-    <td>{{notification.eventTimestamp}}</td>
-    <td>{{notification.sentTimestamp}}</td>
-    <!--<td>-->
-        <!--<a href="#" ng-click="deleteNotification(notificatoin.notificationGuid)"><span class="glyphicon glyphicon-remove-sign"-->
-                                                                                       <!--aria-hidden="true"></span></a>-->
-    <!--</td>-->
+    <td>{{notification.eventTimestamp | date : "dd/MM/yyyy HH:mm:ss"}}</td>
+    <td>{{notification.sentTimestamp | date : "dd/MM/yyyy HH:mm:ss"}}</td>
+    <td>
+        <input type="checkbox" aria-label="read">
+    </td>
+    <td>
+        <button ng-click="viewNotification(notification)" type="button" class="btn btn-default">Details</button>
+    </td>
+    <td>
+        <button ng-click="deleteNotification(notification)" type="button" class="btn btn-default">
+            Delete
+        </button>
+    </td>
 </script>
 </body>
 </html>

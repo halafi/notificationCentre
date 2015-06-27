@@ -1,0 +1,32 @@
+.top-leftSelect {
+    float:left;
+}
+
+.top-rightFilter {
+    float:right;
+    margin-bottom: 15px;
+}
+
+.stampCell {
+    width: 140px;
+}
+
+.typeCell {
+    width: 200px;
+}
+
+.subtypeCell {
+    width: 200px;
+}
+
+.titleCell {
+    width: 150px;
+}
+
+.buttonCell {
+    width: 80px;
+}
+
+.checkboxCell {
+    width: 20px;
+}
