@@ -1,4 +1,3 @@
 # Notification centre
 1. Execute <code>mvn package exec:exec</code>
-2. App will be at: http://localhost:8080/notificationCentre/
-
+2. App will be at: [http://localhost:8080/notificationCentre#/](http://localhost:8080/notificationCentre#/)
